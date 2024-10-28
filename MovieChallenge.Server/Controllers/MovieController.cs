@@ -7,7 +7,7 @@ namespace MovieChallenge.Server.Controllers
 {
     //may be good to add authentication if going into production
     [Route("[controller]")]
-    public class MovieController(ILogger<MovieController> logger, IMovieService movieService) : ControllerBase
+    public class MovieController(IMovieService movieService) : ControllerBase
     {
         [HttpGet]
         public async Task<PaginatedResponse<MovieDto>> Get([FromQuery] PaginatedDataRequest<MovieSearchModel> request)
