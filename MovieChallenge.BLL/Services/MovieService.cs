@@ -3,8 +3,6 @@ using MovieChallenge.BLL.DTOs;
 using MovieChallenge.BLL.Extensions;
 using MovieChallenge.BLL.Interfaces;
 using MovieChallenge.DAL;
-using MovieChallenge.DAL.Entities;
-using System.Linq.Expressions;
 
 namespace MovieChallenge.BLL.Services
 {
@@ -33,26 +31,21 @@ namespace MovieChallenge.BLL.Services
 
                 if (request.SearchModel.OrderBy.HasValue())
                 {
-                    Expression<Func<Movie, object>> orderByExpression = m => m.Id;
                     switch (request.SearchModel.OrderBy!.ToLower())
                     {
                         case "title":
-                            orderByExpression = m => m.Title.ToLower();
+                            query = query.OrderBy(m => m.Title.ToLower(), request.SearchModel.OrderAscending);
                             break;
                         case "releasedate":
-                            orderByExpression = m => m.ReleaseDate!;
+                            query = query.OrderBy(m => m.ReleaseDate, request.SearchModel.OrderAscending);
                             break;
                     }
-
-                    query = request.SearchModel.OrderAscending ? query.OrderBy(orderByExpression) : query.OrderByDescending(orderByExpression);
                 }
             }
 
-            //the projection part could be made reusable via something like AutoMapper
             var paginatedResults = await query
                 .Paginate(request)
                 .AsNoTracking()
-                .AsSplitQuery()
                 .Select(m => new MovieDto
                 {
                     Id = m.Id,
