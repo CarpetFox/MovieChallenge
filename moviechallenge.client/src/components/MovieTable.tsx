@@ -38,7 +38,7 @@ function MovieTable({ selectedGenres, titleSearch }: { selectedGenres: Genre[], 
     useEffect(() => {
         const fetchData = async () => {
             setDataLoading(true);
-            let query = `movie?pageSize=${paginationModel.pageSize}&page=${paginationModel.page}&searchModel.title=${titleSearch || ''}&orderBy=${sortModel?.orderBy || 'Id'}&orderAscending=${sortModel?.orderAscending ?? true}`;
+            let query = `movie?pageSize=${paginationModel.pageSize}&page=${paginationModel.page}&searchModel.title=${encodeURIComponent(titleSearch) || ''}&orderBy=${sortModel?.orderBy || 'Id'}&orderAscending=${sortModel?.orderAscending ?? true}`;
             if (selectedGenres && selectedGenres.length) {
                 for (const sg of selectedGenres) {
                     query += `&searchModel.genres=${sg}`;
