@@ -1,6 +1,6 @@
 import { EnqueueSnackbar } from "notistack";
 
-export const handleErrorCase = async (response: Response, enqueueSnackbar: EnqueueSnackbar, defaultMessage: string, callback: () => void) => {
+export const handleResponse = async (response: Response, enqueueSnackbar: EnqueueSnackbar, defaultMessage: string, successCallback: () => void, errorCallback: (() => void) | null = null) => {
     if (response.status === 500) {
         let snackbarMessage = defaultMessage;
         try {
@@ -9,7 +9,10 @@ export const handleErrorCase = async (response: Response, enqueueSnackbar: Enque
         }
         finally {
             enqueueSnackbar(snackbarMessage, { variant: 'error' });
-            callback();
+            errorCallback?.();
         }
+    }
+    else {
+        successCallback();
     }
 }

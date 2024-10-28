@@ -6,8 +6,8 @@ import moment from 'moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button } from '@mui/material';
 import { Genre, Movie } from '../types/types';
-import { handleErrorCase } from '../utils/httpErrorHandler';
 import MovieDialog from './MovieDialog';
+import { handleResponse } from '../utils/handleResponse';
 
 function MovieTable({ selectedGenres, titleSearch }: { selectedGenres: Genre[], titleSearch: string }) {
     const [movies, setMovies] = useState<Movie[]>();
@@ -38,7 +38,7 @@ function MovieTable({ selectedGenres, titleSearch }: { selectedGenres: Genre[], 
     useEffect(() => {
         const fetchData = async () => {
             setDataLoading(true);
-            let query = `movie?pageSize=${paginationModel.pageSize}&page=${paginationModel.page}&searchModel.title=${titleSearch || ''}&searchModel.orderBy=${sortModel?.orderBy || 'Id'}&searchModel.orderAscending=${sortModel?.orderAscending ?? true}`;
+            let query = `movie?pageSize=${paginationModel.pageSize}&page=${paginationModel.page}&searchModel.title=${titleSearch || ''}&orderBy=${sortModel?.orderBy || 'Id'}&orderAscending=${sortModel?.orderAscending ?? true}`;
             if (selectedGenres && selectedGenres.length) {
                 for (const sg of selectedGenres) {
                     query += `&searchModel.genres=${sg}`;
@@ -46,16 +46,15 @@ function MovieTable({ selectedGenres, titleSearch }: { selectedGenres: Genre[], 
             }
             await fetch(query)
                 .then(async response => {
-                    await handleErrorCase(response, enqueueSnackbar, 'There was an error loading the Movie data.', () => {
+                    await handleResponse(response, enqueueSnackbar, 'There was an error loading the Movie data.', async () => {
+                        const data = await response.json();
+                        setMovies(data.data);
+                        setRowCount(data.total);
+                        return;
+                    }, () => {
                         setMovies([]);
                         setRowCount(0);
-                        setDataLoading(false);
-                        return;
                     });
-
-                    const data = await response.json();
-                    setMovies(data.data);
-                    setRowCount(data.total);
                     setDataLoading(false);
                 })
         };
