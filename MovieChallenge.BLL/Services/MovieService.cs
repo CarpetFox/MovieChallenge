@@ -29,15 +29,15 @@ namespace MovieChallenge.BLL.Services
                     }
                 }
 
-                if (request.SearchModel.OrderBy.HasValue())
+                if (request.OrderBy.HasValue())
                 {
-                    switch (request.SearchModel.OrderBy!.ToLower())
+                    switch (request.OrderBy!.ToLower())
                     {
                         case "title":
-                            query = query.OrderBy(m => m.Title.ToLower(), request.SearchModel.OrderAscending);
+                            query = query.OrderBy(m => m.Title.ToLower(), request.OrderAscending);
                             break;
                         case "releasedate":
-                            query = query.OrderBy(m => m.ReleaseDate, request.SearchModel.OrderAscending);
+                            query = query.OrderBy(m => m.ReleaseDate, request.OrderAscending);
                             break;
                     }
                 }
