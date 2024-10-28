@@ -18,7 +18,7 @@ I've used the MUI component library to achieve the material look, and I've used 
 It should be fairly straightforward to run once pulled down. You will need to set multiple startup projects so that it runs the `.server` project and the `.client` project.
 Its possible that the migrations will not auto-run. If so, target the DAL in Package Manager and run `update-database`.
 
-Whilst the API is spinning up, the UI will error, so you will need to wait for it to finish loading and then manually refresh currently. If VS decides to break on any errors in the UI it can stop the API from starting until they are allowed to continue (initially it never did this for me, but then started doing so when I updated VS to a later version). 
+Whilst the API is spinning up, the UI will error, so you will need to wait for it to finish loading and then manually refresh currently. If VS decides to break on any errors in the UI it can stop the API from starting until they are allowed to continue (initially it never did this for me, but then started doing so when I updated VS to the latest version). 
 ## Deployment
 I tried publishing it to Docker Desktop, but ran into some snags with the Vite files. However, it has been made using the default VS template, so I think it should be a simple application to deploy for someone with a bit more React experience.
 ## Unit Testing
