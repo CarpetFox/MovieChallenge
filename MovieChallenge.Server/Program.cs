@@ -23,6 +23,7 @@ namespace MovieChallenge.Server
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseExceptionHandler();
 
             // Configure the HTTP request pipeline.
             app.UseHttpsRedirection();
