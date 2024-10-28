@@ -2,8 +2,14 @@ import { EnqueueSnackbar } from "notistack";
 
 export const handleErrorCase = async (response: Response, enqueueSnackbar: EnqueueSnackbar, defaultMessage: string, callback: () => void) => {
     if (response.status === 500) {
-        const data = await response.json();
-        enqueueSnackbar(data.uiFriendlyError || defaultMessage, { variant: 'error' });
-        callback();
+        let snackbarMessage = defaultMessage;
+        try {
+            const data = await response.json();
+            if (data.uiFriendlyError) snackbarMessage = data.uiFriendlyError;
+        }
+        finally {
+            enqueueSnackbar(snackbarMessage, { variant: 'error' });
+            callback();
+        }
     }
 }
