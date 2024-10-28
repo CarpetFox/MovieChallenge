@@ -28,18 +28,18 @@ namespace MovieChallenge.BLL.Services
                         query = query.Where(q => q.Genres.Any(g => g.Id == id));
                     }
                 }
+            }
 
-                if (request.OrderBy.HasValue())
+            if (request.OrderBy.HasValue())
+            {
+                switch (request.OrderBy!.ToLower())
                 {
-                    switch (request.OrderBy!.ToLower())
-                    {
-                        case "title":
-                            query = query.OrderBy(m => m.Title.ToLower(), request.OrderAscending);
-                            break;
-                        case "releasedate":
-                            query = query.OrderBy(m => m.ReleaseDate, request.OrderAscending);
-                            break;
-                    }
+                    case "title":
+                        query = query.OrderBy(m => m.Title.ToLower(), request.OrderAscending);
+                        break;
+                    case "releasedate":
+                        query = query.OrderBy(m => m.ReleaseDate, request.OrderAscending);
+                        break;
                 }
             }
 
