@@ -1,20 +1,21 @@
 # Movie Challenge
 The application is a .Net Core server with a React UI using the MUI component library. It's actually the first time I've worked with React to build something like this. I've tried to hit most of the user requirements, though I have not implemented anything for actors. There is also some additional functionality in the UI that lets the user view posters, which I did to try things out.
 ## The Database
-I've seeded the movies CSV into a SQL lite db using EF Core migrations, and split the genres into their own entitiy with a many to many relationship with the movies. Were it a production setup, this could be substituted for a proper SQL Server DB.
+I've seeded the movies CSV into a SQL lite DB using EF Core migrations, and split the genres into their own entitiy with a many to many relationship with the movies. Were it a production setup, this could be substituted for a proper SQL Server DB.
 ## The API
 The API can be hit indendently of the UI. It currently does not have any authentication, so it can even be queried via a browser URL pretty simply currently.
 
 The following example searches for movies with Batman in the title, sorted descending by title, which has the science fiction genre, and shows the third page of 10 results.
+
 `/movie?pageSize=10&page=2&orderBy=title&orderAscending=false&searchModel.title=Batman&searchModel.genres=15`
 
 You can do `movie/getGenres` to list all the genres to find IDs to search by.
 
-Thge idea is that all pagniated results from the API would follow a format where they accept pageSize etc, but then have a more specific searchModel embeded in the request for particular search requirements for that entity. A swagger etc would be a good next step to improve the API.
+The idea is that all pagniated results from the API would follow a format where they accept pageSize etc, but then have a more specific searchModel embeded in the request for particular search requirements for that entity. A swagger etc would be a good next step to improve the API.
 ## The UI
 I've used the MUI component library to achieve the material look, and I've used flexbox in places to make things responsive. Many of my styles are currently embedded in-line, which is a possible room for improvement. You can search on the title, filter genres (its a multiselect), and sort on the Title and Release Date columns. The pagination resets when the core filters are changed so that it reflects the new data set in a less confusing way.
 ## Running the app
-It should be fairly straightforward to run once pulled down. You will probably need to set multiple startup projects so that it runs the `.server` project and the `.client` project.
+It should be fairly straightforward to run once pulled down. You will need to set multiple startup projects so that it runs the `.server` project and the `.client` project.
 Its possible that the migrations will not auto-run. If so, target the DAL in Package Manager and run `update-database`.
 
 Whilst the API is spinning up, the UI will error, so you will need to wait for it to finish loading and then manually refresh currently. If VS decides to break on any errors in the UI it can stop the API from starting until they are allowed to continue (initially it never did this for me, but then started doing so when I updated VS to a later version). 
