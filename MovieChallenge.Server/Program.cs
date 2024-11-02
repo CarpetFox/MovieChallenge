@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MovieChallenge.BLL.Interfaces;
 using MovieChallenge.BLL.Services;
 using MovieChallenge.DAL;
@@ -12,7 +13,16 @@ namespace MovieChallenge.Server
 
             // Add services to the container.
             builder.Services.AddControllers();
-            builder.Services.AddDbContext<MovieChallengeContext>();
+
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+            var dbPath = Path.Join(path, "moviechallenge.db");
+
+            builder.Services.AddDbContext<MovieChallengeContext>(options =>
+            {
+                options.UseSqlite($"Data Source={dbPath}");
+            });
+
             builder.Services.AddScoped<IMovieService, MovieService>();
 
             // Add global exception handling

@@ -12,17 +12,14 @@ namespace MovieChallenge.DAL
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genres { get; set; }
 
-        public string DbPath { get; }
 
         public MovieChallengeContext()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = Path.Join(path, "moviechallenge.db");
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={DbPath}");
+        public MovieChallengeContext(DbContextOptions<MovieChallengeContext> options) : base(options)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
