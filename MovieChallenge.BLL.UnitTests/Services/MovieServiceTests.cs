@@ -10,6 +10,7 @@ namespace MovieChallenge.BLL.UnitTests.Services
     {
         private readonly SqliteConnection _connection;
         private readonly MovieService _movieService;
+        private readonly MovieChallengeContext _context;
 
 
         public MovieServiceTests()
@@ -22,13 +23,17 @@ namespace MovieChallenge.BLL.UnitTests.Services
                 .UseSqlite(_connection)
                 .Options;
 
-            var context = new MovieChallengeContext(contextOptions);
-            context.Database.EnsureCreated();
-            _movieService = new MovieService(context);
+            _context = new MovieChallengeContext(contextOptions);
+            _context.Database.EnsureCreated();
+            _movieService = new MovieService(_context);
         }
 
         [OneTimeTearDown]
-        public void Dispose() => _connection.Dispose();
+        public void Dispose()
+        {
+            _connection.Dispose();
+            _context.Dispose();
+        }
 
         [TestCase(1)]
         [TestCase(10)]
@@ -166,8 +171,12 @@ namespace MovieChallenge.BLL.UnitTests.Services
         public async Task GetGenres_GetsAllGenres()
         {
             var result = await _movieService.GetGenres();
+            var resultGenreNames = result.Select(r => r.Name).ToList();
 
-            Assert.That(result.Count(), Is.EqualTo(19));
+            foreach (var genre in _context.Genres) 
+            {
+                Assert.Contains(genre.Name, resultGenreNames);
+            }
         }
     }
 }
